@@ -10,7 +10,7 @@ const connect = require("./schemas");
 connect();
 
 //checking mongoose db connection
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 // app.get("/mongodb", async (req, res) => {
 //     await mongoose.connect("mongodb://localhost/clone", {
 //         useNewUrlParser: true,

@@ -1,9 +1,6 @@
 
 const mongoose = require("mongoose");
 const { Schema } = mongoose
-const fs = require("fs") // filesystem?
-const multer = require("multer") // middleware used for uploading files 
-
 const PostSchema = new Schema({
 
     postId: [Number],
@@ -20,6 +17,7 @@ const PostSchema = new Schema({
 
     comments: [{
         commentId: [Number],
+        writerInfo: [{ name: String, profile: { data: Buffer, contentType: String } }],
         commentText: String,
         commentCreatedAt: Date
     }],
@@ -28,7 +26,6 @@ const PostSchema = new Schema({
         likeCnt: [Number],
         userList: String,
     }],
-
 
     // var schema = new Schema({
     //     img: { data: Buffer, contentType: String }
@@ -55,4 +52,5 @@ const PostSchema = new Schema({
     //       console.error('saved img to mongo');
     //     }
 })
-export default mongoose.model('Post', PostSchema);
+//export default mongoose.model('Post', PostSchema);
+module.exports = mongoose.model('Post', PostSchema);

@@ -3,6 +3,13 @@ const app = express()
 const port = 8080
 const mongoose = require("mongoose");
 
+/* testing  */
+const fs = require("fs")
+const mongoose = require("mongoose")
+const { Schema } = mongoose;
+
+
+
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
@@ -10,17 +17,13 @@ app.get('/', (req, res) => {
 const connect = require("./schemas");
 connect();
 
-//checking mongoose db connection
 // app.get("/mongodb", async (req, res) => {
-//     await mongoose.connect("mongodb://localhost/clone", {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//         useFindAndModify: true,
-//         useCreateIndex: true,
-//     });
 
 
-//     const { Schema } = mongoose;
+//     const imgSchema = new Schema({
+//         imgId: Number,
+//         img: { data: Buffer, contentType: String }
+//     })
 //     const blogsSchema = new Schema({
 //         postId: {
 //             type: Number,
@@ -29,14 +32,8 @@ connect();
 //         },
 //     });
 
-//     let blogs = mongoose.model("blogs", blogsSchema);
-//     await blogs.create({
-//         postId: 1,
-//     });
+//     const 
 
-
-// res.send("ok");
-// });
 
 
 app.use(express.urlencoded({ extended: false }));

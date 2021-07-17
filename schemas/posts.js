@@ -5,26 +5,28 @@ const PostSchema = new Schema({
 
     postId: Number,
     userInfo: [{
-        userEmail: String,
+
         firstName: String,
-        profile: String,
+        lastName: String,
+        profilePic: String,
     }],
     content: [{
         text: String,
-        pictures: String,
+        picture: String,
         createdAt: Date
     }],
 
     comments: [{
         commentId: Number,
-        writerInfo: [{ name: String, profile: String }],
+        // q
+        userInfo: [{ firstName: String, lastName: String, profilePic: String }],
         commentText: String,
-        commentCreatedAt: Date
+        createdAt: Date
     }],
 
     like: [{
         likeCnt: Number,
-        userList: String,
+        userList: [{ firstName: String, lastName: String }]
     }],
 
 

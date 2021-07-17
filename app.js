@@ -4,10 +4,6 @@ const port = 8080
 const mongoose = require("mongoose");
 const Test = require("./schemas/test")
 
-// /* testing  */
-// const fs = require("fs")
-//const { Schema } = mongoose;
-// const multer = require("multer")
 
 
 

@@ -1,58 +1,35 @@
 
 const mongoose = require("mongoose");
 const { Schema } = mongoose
-const fs = require("fs") // filesystem?
-const multer = require("multer") // middleware used for uploading files 
-
 const PostSchema = new Schema({
 
-    postId: [Number],
+    postId: Number,
     userInfo: [{
-        userEmail: String,
+
         firstName: String,
-        profile: { data: Buffer, contentType: String },
+        lastName: String,
+        profilePic: String,
     }],
     content: [{
         text: String,
-        pictures: { data: Buffer, contentType: String },
+        picture: String,
         createdAt: Date
     }],
 
     comments: [{
-        commentId: [Number],
+        commentId: Number,
+        // q
+        userInfo: [{ firstName: String, lastName: String, profilePic: String }],
         commentText: String,
-        commentCreatedAt: Date
+        createdAt: Date
     }],
 
     like: [{
-        likeCnt: [Number],
-        userList: String,
+        likeCnt: Number,
+        userList: [{ firstName: String, lastName: String }]
     }],
 
 
-    // var schema = new Schema({
-    //     img: { data: Buffer, contentType: String }
-    // });
-
-    // // our model
-    // var A = mongoose.model('A', schema);
-
-    // mongoose.connection.on('open', function () {
-    //   console.error('mongo is open');
-
-    //   // empty the collection
-    //   A.remove(function (err) {
-    //     if (err) throw err;
-
-    //     console.error('removed old docs');
-
-    //     // store an img in binary in mongo
-    //     var a = new A;
-    //     a.img.data = fs.readFileSync(imgPath);
-    //     a.img.contentType = 'image/png';
-    //     a.save(function (err, a) {
-    //       if (err) throw err;
-    //       console.error('saved img to mongo');
-    //     }
 })
-export default mongoose.model('Post', PostSchema);
+
+module.exports = mongoose.model('Post', PostSchema);

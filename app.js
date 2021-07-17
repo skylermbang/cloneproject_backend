@@ -2,20 +2,48 @@ const express = require('express')
 const app = express()
 const port = 8080
 const mongoose = require("mongoose");
-
-/* testing  */
-const fs = require("fs")
-// const mongoose = require("mongoose")
-const { Schema } = mongoose;
+const Test = require("./schemas/test")
 
 
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
 
 const connect = require("./schemas");
 connect();
+
+
+
+// testing mongoose connection and make test table
+app.get("/mongodb", async (req, res) => {
+    const test99 = [{ name: "skyler", phone: 1 }]
+    const test = "abc"
+    await Test.create({ test, test99 })
+    res.send("connected")
+})
+
+app.get("/mongodb2", async (req, res) => {
+
+    const result = await Test.find({})
+    const test99 = result[0].test99[0]["name"]
+    res.send(result)
+})
+
+app.get('/test', async (req, res) => {
+
+    const result = await Test.find({})
+    res.send(result)
+})
+
+
+app.post('/test', async (req, res) => {
+
+    const { test1 } = req.body
+    const result = await Test.create({ test1 })
+    res.send(result)
+})
+
+
+
+
 
 // app.get("/mongodb", async (req, res) => {
 
@@ -33,8 +61,6 @@ connect();
 //     });
 
 //     const 
-
-
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

@@ -2,44 +2,53 @@ const express = require('express')
 const app = express()
 const port = 8080
 const mongoose = require("mongoose");
+const Test = require("./schemas/test")
 
-/* testing  */
-const fs = require("fs")
-
-const { Schema } = mongoose;
-
-const multer = require("multer")
-
+// /* testing  */
+// const fs = require("fs")
+//const { Schema } = mongoose;
+// const multer = require("multer")
 
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
 
 const connect = require("./schemas");
 connect();
 
 
-var ItemSchema = new Schema({
-    img:
-        { data: Buffer, contentType: String }
+
+// testing mongoose connection and make test table
+app.get("/mongodb", async (req, res) => {
+    const test99 = [{ name: "skyler", phone: 1 }]
+    const test = "abc"
+    await Test.create({ test, test99 })
+    res.send("connected")
 })
-var Item = mongoose.model('Img', ItemSchema)
+
+app.get("/mongodb2", async (req, res) => {
+
+    const result = await Test.find({})
+    const test99 = result[0].test99[0]["name"]
+    res.send(result)
+})
+
+app.get('/test', async (req, res) => {
+
+    const result = await Test.find({})
+    res.send(result)
+})
 
 
-app.use(multer({
-    dest: "./uploads",
-    rename: function (fieldname, filename) {
-        return filename;
-    },
-}));
+app.post('/test', async (req, res) => {
 
-app.post("/api/photo", function (req, res) {
-    var newItem = new Schema();
-    newItem.img.data = fs.readFileSync(req.files.userPhoto.path)
-    newItem.img.contentType = "image / png";
-    newItem.save();
-});
+    const { test1 } = req.body
+    const result = await Test.create({ test1 })
+    res.send(result)
+})
+
+
+
+
+
 // app.get("/mongodb", async (req, res) => {
 
 
@@ -56,8 +65,6 @@ app.post("/api/photo", function (req, res) {
 //     });
 
 //     const 
-
-
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

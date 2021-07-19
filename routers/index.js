@@ -38,5 +38,17 @@ router.post("/signup", async (req, res) => {
 
 })
 
+router.get('/email', async (req, res) => {
+    const { email } = req.query // take email in a query
+
+    if (email) { // if email exist
+        const emailCheck = await User.findOne({ where: { email: req.query.email } })
+        if (emailCheck) {
+            const emailExist = true
+            res.status(200).send({ emailExist })
+            return
+        }
+    }
+})
 
 module.exports = router

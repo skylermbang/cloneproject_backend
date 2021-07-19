@@ -4,13 +4,8 @@ const port = 8080
 const mongoose = require("mongoose");
 const Test = require("./schemas/test")
 
-
-
-
 const connect = require("./schemas");
 connect();
-
-
 
 // testing mongoose connection and make test table
 app.get("/mongodb", async (req, res) => {
@@ -42,8 +37,53 @@ app.post('/test', async (req, res) => {
 })
 
 
+const { Comment } = require("./../schemas/comments")
 
+// CREATE comments ---------------------------------------
+app.post('/api/comments', async (req, res) => {
+    const user = new User(req.body);
+    try {
+        await user.save();
+        await res.status(201).send(user);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
 
+// UPDATE comments ---------------------------------------
+app.put('/api/comments/:commentId', (req, res, next) => {
+    Comment.update({ commentId: req.params.commentid }, { comment: req.body.comment })
+        .then((result) => {
+            res.json(result)
+        })
+        .catch((err) => {
+            console.error(err)
+            next(err)
+        })
+})
+
+// delete comments ---------------------------------------
+app.delete('/api/comments/:commentId', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.commentId); // find one and delete
+        if (!user) res.status(404).send(); // if user is not received
+        res.send(user);
+    } catch (err) { // if error occurs
+        res.status(500).send(); // internal server error messege
+    }
+});
+
+// email duplication check ---------------------------------------
+app.get('/api/email', async (req, res) => {
+    const { email } = req.query // take email in a query
+
+    if (email) { // if email exist
+        const emailCheck = await User.findOne({ where: { email: req.query.email } })
+        if (emailCheck) {
+            const emailExist = true
+            res.status(200).send({ emailExist })
+            return
+        }
 
 // app.get("/mongodb", async (req, res) => {
 

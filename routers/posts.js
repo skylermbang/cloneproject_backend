@@ -1,15 +1,22 @@
 const express = require("express")
 const router = express.Router()
-const Post = require("../schemas/posts");
+const Post = require("../schemas/posts")
+const Comment = require("../schemas/comments")
 
 
 
-router.get("/api/posts", async (req, res) => {
+router.get("/", async (req, res) => {
 
     const { postId } = await Post.find({})
-    const list = await Post.find({}).sort(postId)
+    const list = await Post.find({}).sort(postId).map(post => {
+        return { post: post, comment: Comment.find({ postId: post.postId }) }
+    })
     res.status(201).json(list)
+
 })
+
+
+
 
 router.post("/api/test/posts", async (req, res) => {
     const posts = await Post.find({})

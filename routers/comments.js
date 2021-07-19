@@ -16,8 +16,6 @@ const Comment = require("../schemas/comments");
 
 router.post('/', async (req, res) => {
     // comments writer info get from token
-
-
     const { commentText, postId } = req.body
     const allComments = await Comment.find({})
     const commentId = allComments.length + 1
@@ -26,7 +24,7 @@ router.post('/', async (req, res) => {
     const lastName = "Bang"
     try {
         await User.create({ postId, commentId, commentText, firstName, lastName });
-        await res.status(201).send(" comment  successfully written ");
+        res.status(201).send(" comment  successfully written ");
     } catch (err) {
         res.status(400).send(err);
     }

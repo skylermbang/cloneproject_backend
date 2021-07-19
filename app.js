@@ -22,6 +22,8 @@ connect();
 
 app.use('/api/posts', postsRouter)
 app.use('/test', testsRouter)
+const carsRouter = require("./routers/car")
+app.use('/cars', carsRouter)
 app.use('/api/', indexRouter)
 app.use('/api/comments', commentsRouter)
 app.listen(port, () => {

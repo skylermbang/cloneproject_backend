@@ -8,12 +8,11 @@ router.get("/login", async (req, res) => {
 
     const { userId, password } = req.body
     const user = await User.findOne({ userId, password: hash(password) })
+    const userInfo = [{ firstName: user.firstName, lastName: user.lastName, profilePic: user.profilePic }]
+
     if (user) {
-
-
-        const token = jwt.sign({ userEmail: user.Id }, "walaby")
-        res.status(201).send(" login successful")
-
+        const token = jwt.sign({ userId: user.Id }, "walaby")
+        res.status(201).json(userInfo)
         return
     }
     res.status(201).send(" Wrong Id or Password")

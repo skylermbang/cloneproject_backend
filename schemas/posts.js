@@ -17,12 +17,18 @@ const PostSchema = new Schema({
         createdAt: { type: Date, default: Date.now }
     }],
 
-    comments: [{
-        commentId: Number,
-        userInfo: [{ firstName: String, lastName: String, profilePic: String }],
-        commentText: String,
-        createdAt: { type: Date, default: Date.now }
-    }],
+    // comments: [{
+    //     commentId: Number,
+    //     userInfo: [{ firstName: String, lastName: String, profilePic: String }],
+    //     commentText: String,
+    //     createdAt: { type: Date, default: Date.now }
+    // }],
+
+    comments: {
+        type: Schema.Types.ObjectId,
+        ref: 'comments',
+        required: true
+    },
 
     like: [{
         likeCnt: Number,

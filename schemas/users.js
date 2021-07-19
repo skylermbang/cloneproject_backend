@@ -8,9 +8,11 @@ const UserSchema = new Schema({
     lastName: String,
     email: String,
     gender: String,
-    profilePic: String
+    profilePic: String,
+    password: String
 
 })
 
 
-export default mongoose.model('User', UserSchema);
+
+module.exports = mongoose.model('User', UserSchema);

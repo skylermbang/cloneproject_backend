@@ -5,6 +5,10 @@ const router = express.Router()
 const Car = require("../schemas/cars");
 const Owner = require('../schemas/owners')
 
+
+router.get("/walaby", (req, res) => {
+    res.send("connected")
+})
 router.get("/noPopulate", async (req, res) => {
     const allCar = await Car.find({})
     res.json(allCar)

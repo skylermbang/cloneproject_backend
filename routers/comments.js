@@ -17,11 +17,24 @@ const Comment = require("../schemas/comments");
 router.post('/', async (req, res) => {
     // comments writer info get from token
     const { commentText, postId } = req.body
+    // commentId auto increment 
     const allComments = await Comment.find({})
-    const commentId = allComments.length + 1
+    const commentId1 = allComments.length + 1
     // first name and last name get it from db that searched by userId in the token
     const firstName = "skyler"
     const lastName = "Bang"
+    // with given postId search _id and put it here
+    const allPosts = await this.post.find({})
+    const commentId = allPosts[0]._id
+
+    const post = await Post.findOne({ postId })
+    if (post) {
+        post.commentId = commentId
+        post.save()
+        //await Post.findOneAndUpdate(postId, { comments })
+    }
+
+    const _id = new mongoose.Types.ObjectId()
     try {
         await User.create({ postId, commentId, commentText, firstName, lastName });
         res.status(201).send(" comment  successfully written ");

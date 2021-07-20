@@ -4,6 +4,7 @@ const { Schema } = mongoose
 const getCurrentDate = require("../utils/moment")
 const PostSchema = new Schema({
 
+    _id: Schema.Types.ObjectId,
     postId: Number,
     userInfo: [{
 
@@ -24,10 +25,10 @@ const PostSchema = new Schema({
     //     createdAt: { type: Date, default: Date.now }
     // }],
 
-    comments: {
+    commentId: {
         type: Schema.Types.ObjectId,
-        ref: 'comments',
-        required: true
+        ref: 'Comment'
+
     },
 
     like: [{

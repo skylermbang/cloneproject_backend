@@ -4,7 +4,7 @@ const User = require("../schemas/users");
 const hash = require("object-hash")
 const jwt = require("jsonwebtoken")
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
 
     const { userId, password } = req.body
     const user = await User.findOne({ userId, password: hash(password) })

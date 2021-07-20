@@ -14,7 +14,7 @@ const PostSchema = new Schema({
     }],
     content: [{
         text: String,
-        picture: [{ picture: String }],
+        picture: { picture: String },
         createdAt: { type: Date, default: Date.now }
     }],
 

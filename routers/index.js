@@ -6,16 +6,16 @@ const jwt = require("jsonwebtoken")
 
 router.post("/login", async (req, res) => {
 
-    const { userId, password } = req.body
-    const user = await User.findOne({ userId, password: hash(password) })
-    const userInfo = [{ firstName: user.firstName, lastName: user.lastName, profilePic: user.profilePic }]
+    const { userId } = req.body
+    const password = hash(req.body.password)
+    const user = await User.findOne({ email: userId, password })
+    console.log(user)
 
     if (user) {
         const token = jwt.sign({ userId: user.Id }, "walaby")
-        res.status(201).json(userInfo)
-        return
+        return res.status(201).send({ token })
     }
-    res.status(201).send(" Wrong Id or Password")
+    res.status(201).send("Wrong Id or Password")
 })
 
 router.post("/signup", async (req, res) => {
@@ -41,11 +41,12 @@ router.get('/email', async (req, res) => {
     const { email } = req.query // take email in a query
 
     if (email) { // if email exist
-        const emailCheck = await User.findOne({ where: { email: req.query.email } })
+        const emailCheck = await User.findOne({ email: req.query.email })
         if (emailCheck) {
             const emailExist = true
-            res.status(200).send({ emailExist })
-            return
+            return res.status(200).send({ emailExist })
+        } else {
+            res.status(200).send("you can register this email")
         }
     }
 })

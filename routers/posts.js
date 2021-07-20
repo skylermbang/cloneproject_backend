@@ -2,6 +2,8 @@ const express = require("express")
 const router = express.Router()
 const Post = require("../schemas/posts")
 const Comment = require("../schemas/comments")
+const mongoose = require("mongoose")
+
 
 
 
@@ -14,10 +16,6 @@ router.get("/", async (req, res) => {
     res.status(201).json(list)
 
 })
-
-
-
-
 router.post("/test/posts", async (req, res) => {
     const posts = await Post.find({})
     const postId = posts.length + 1

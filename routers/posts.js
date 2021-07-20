@@ -12,19 +12,9 @@ router.get("/", async (req, res) => {
     const list = await Post.find({}).sort({ postId: -1 }).populate("commentId")
     res.status(200).json(list)
 })
-// router.post("/test/posts", async (req, res) => {
-//     const posts = await Post.find({})
-//     const postId = posts.length + 1
-//     const { content, userInfo, } = req.body
-//     // userInfo 
-//     // token에서 가져옴
-//     console.log(content)
-//     const like = [{ likeCnt: 0, userList: [{}] }]
-//     await Post.create({ postId, content, userInfo, like, })
-//     res.status(201).send({ postId: postId })
-// })
 
 router.post("/", async (req, res) => {
+    console.log("Writing post API")
     const posts = await Post.find({})
     const postId = posts.length + 1
     const { content, userInfo } = req.body
@@ -37,6 +27,7 @@ router.post("/", async (req, res) => {
 })
 
 router.delete("/:postId", async (req, res) => {
+    console.log("delete post API")
     const { postId } = req.params
     console.log(postId)
     await Post.findOneAndRemove({ postId })
@@ -44,6 +35,7 @@ router.delete("/:postId", async (req, res) => {
 })
 
 router.put("/:postId", async (req, res) => {
+    console.log("delete post API")
     const { postId } = req.params
     console.log(postId)
     const { content } = req.body

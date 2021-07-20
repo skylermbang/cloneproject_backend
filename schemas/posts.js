@@ -1,6 +1,7 @@
 
 const mongoose = require("mongoose");
 const { Schema } = mongoose
+const getCurrentDate = require("../utils/moment")
 const PostSchema = new Schema({
 
     postId: Number,
@@ -12,17 +13,22 @@ const PostSchema = new Schema({
     }],
     content: [{
         text: String,
-        picture: String,
-        createdAt: Date
+        picture: [{ picture: String }],
+        createdAt: { type: Date, default: Date.now }
     }],
 
-    comments: [{
-        commentId: Number,
-        // q
-        userInfo: [{ firstName: String, lastName: String, profilePic: String }],
-        commentText: String,
-        createdAt: Date
-    }],
+    // comments: [{
+    //     commentId: Number,
+    //     userInfo: [{ firstName: String, lastName: String, profilePic: String }],
+    //     commentText: String,
+    //     createdAt: { type: Date, default: Date.now }
+    // }],
+
+    comments: {
+        type: Schema.Types.ObjectId,
+        ref: 'comments',
+        required: true
+    },
 
     like: [{
         likeCnt: Number,

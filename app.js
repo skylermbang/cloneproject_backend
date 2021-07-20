@@ -78,8 +78,8 @@ app.get('/api/email', async (req, res) => {
     const { email } = req.query // take email in a query
 
     if (email) { // if email exist
-        const emailCheck = await User.findOne({ where: { email: req.query.email } })
-        if (emailCheck) {
+        const emailCheck = await User.findOne({ where: { email: req.query.email } }) // find dup email
+        if ( emailCheck ) { // if email is duplicated
             const emailExist = true
             res.status(200).send({ emailExist })
             return

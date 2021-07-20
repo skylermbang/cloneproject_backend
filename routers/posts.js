@@ -9,7 +9,7 @@ const mongoose = require("mongoose")
 
 router.get("/", async (req, res) => {
     console.log(" Getting all the post API")
-    const list = await Post.find({}).sort({ postId: -1 }).populate("commentId")
+    const list = await Post.find({}).sort({ postId: -1 }).populate('comments')
     res.status(200).json(list)
 })
 

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../schemas/user");
+const User = require("../schemas/users");
 
 module.exports = (req, res, next) => {
     //console.log("this is test for the middleware");
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
     try {
         /* jwt보낸거로가져와 */
         const { user } = jwt.verify(tokenValue, "walaby");
-        User.findOne({ id: user }) // id 에서 user차저
+        User.findOne({ userId: user }) // id 에서 user차저
             .exec()
             .then((user) => {
                 res.locals.user = user;

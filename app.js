@@ -3,25 +3,16 @@ const app = express()
 const port = 8080
 const mongoose = require("mongoose");
 const cors = require("cors")
-
 app.use(cors())
-
-
 // routers
 const postsRouter = require("./routers/posts")
 const testsRouter = require("./routers/tests")
 const indexRouter = require("./routers/index")
 const commentsRouter = require("./routers/comments")
-
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 const connect = require("./schemas");
 connect();
-
-
-
 
 app.use('/api/posts', postsRouter)
 app.use('/test', testsRouter)

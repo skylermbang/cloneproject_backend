@@ -3,6 +3,8 @@ const router = express.Router()
 const Post = require("../schemas/posts")
 const Comment = require("../schemas/comments")
 const mongoose = require("mongoose")
+const authMiddleware = require("../middlewares/auth-middleware")
+
 
 
 
@@ -13,12 +15,18 @@ router.get("/", async (req, res) => {
     res.status(200).json(list)
 })
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     console.log("Writing post API")
     const posts = await Post.find({})
     const postId = posts.length + 1
-    const { content, userInfo } = req.body
 
+    const user = res.locals.user
+    const firstName = user.firstName
+    const lastName = user.lastName
+    const profilePic = user.profilePic
+    const userInfo = { firstName, lastName, profilePic }
+
+    const { content } = req.body
     //user Info search by userId from token -> 
     const like = { likeCnt: 0, userList: [{}] }
     const _id = new mongoose.Types.ObjectId()
@@ -41,7 +49,6 @@ router.put("/:postId", async (req, res) => {
     const { content } = req.body
     console.log(content, "here line 5000000")
     await Post.findOneAndUpdate({ postId }, { content })
-
     res.status(201).send("Post successfully updated")
 })
 

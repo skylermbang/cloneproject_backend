@@ -56,19 +56,5 @@ router.get("/me", authMiddleware, async (req, res) => {
     }
     res.send({ userInfo })
 })
-// router.get('/email', async (req, res) => {
-//     console.log(" email check API")
-//     const { email } = req.query // take email in a query
-
-//     if (email) { // if email exist
-//         const emailCheck = await User.findOne({ email: req.query.email })
-//         if (emailCheck) {
-//             const emailExist = true
-//             return res.status(200).send({ emailExist })
-//         } else {
-//             res.status(200).send("you can register this email")
-//         }
-//     }
-// })
 
 module.exports = router

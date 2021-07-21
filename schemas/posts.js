@@ -24,8 +24,9 @@ const PostSchema = new Schema({
     }],
 
     like: {
-        likeCnt: Number,
-        userList: [{ firstName: String, lastName: String }]
+
+        likeCnt: { type: Number, default: 0 },
+        userList: { type: Array }
     },
 
 
@@ -33,10 +34,3 @@ const PostSchema = new Schema({
 
 module.exports = mongoose.model('Post', PostSchema);
 
-
-  // comments: [{
-    //     commentId: Number,
-    //     userInfo: [{ firstName: String, lastName: String, profilePic: String }],
-    //     commentText: String,
-    //     createdAt: { type: Date, default: Date.now }
-    // }],

@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require("../schemas/users");
 const hash = require("object-hash")
 const jwt = require("jsonwebtoken")
+const authMiddleware = require("../middlewares/auth-middleware")
 
 router.post("/login", async (req, res) => {
     console.log(" login API ")
@@ -13,7 +14,8 @@ router.post("/login", async (req, res) => {
 
     if (user) {
         const tokenId = user.userId
-        const token = jwt.sign({ userId: tokenId }, "walaby")
+        console.log(tokenId, " here her hereherh 17 from index.js")
+        const token = jwt.sign({ user: tokenId }, "walaby")
 
         const userInfo = {
             fullName: user.firstName + user.lastName,
@@ -43,19 +45,16 @@ router.post("/signup", async (req, res) => {
 
 })
 
-// router.get('/email', async (req, res) => {
-//     console.log(" email check API")
-//     const { email } = req.query // take email in a query
 
-//     if (email) { // if email exist
-//         const emailCheck = await User.findOne({ email: req.query.email })
-//         if (emailCheck) {
-//             const emailExist = true
-//             return res.status(200).send({ emailExist })
-//         } else {
-//             res.status(200).send("you can register this email")
-//         }
-//     }
-// })
+router.get("/me", authMiddleware, async (req, res) => {
+    const user = res.locals.user
+    const userInfo = {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profilePic: user.profilePic
+    }
+    res.send({ userInfo })
+})
 
 module.exports = router

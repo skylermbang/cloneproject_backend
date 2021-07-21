@@ -17,11 +17,11 @@ const PostSchema = new Schema({
         picture: String,
         createdAt: { type: Date, default: Date.now }
     },
-    commentId: {
+    comments: [{
         type: Schema.Types.ObjectId,
         ref: 'Comment'
 
-    },
+    }],
 
     like: {
         likeCnt: Number,

@@ -3,6 +3,7 @@ const router = express.Router()
 const Comment = require("../schemas/comments");
 const Post = require("../schemas/posts");
 const mongoose = require("mongoose")
+const authMiddleware = require("../middlewares/auth-middleware")
 
 
 router.post('/', async (req, res) => {
@@ -10,53 +11,53 @@ router.post('/', async (req, res) => {
     const { commentText, postId } = req.body
     const _id = new mongoose.Types.ObjectId()
 
-    // first name and last name get it from db that searched by userId in the token
-    const firstName = "skyler"
-    const lastName = "Bang"
-
-    const allComments = await Comment.find({})
-    const commentId = allComments[0]._id
-
-    const post = await Post.findOne({ postId })
-    if (post) {
-        post.commentId = commentId
-        post.save()
-        //await Post.findOneAndUpdate(postId, { comments })
-    }
+    const user = res.locals.user
+    const firstName = user.firstName
+    const lastName = user.lastName
+    const profilePic = user.profilePic
 
     try {
-        // commentId auto increment 
         const allComments = await Comment.find({})
         const commentId = allComments.length + 1
-        await Comment.create({ _id, postId, commentId, commentText, firstName, lastName });
-        res.status(201).send(" comment  successfully written ");
+        const newComment = await Comment.create({ _id, postId, commentId, commentText, firstName, lastName });
+        const post = await Post.findOne({ postId })
+        if (post) {
+            post.comments.push(newComment._id)
+            post.save()
+            //await Post.findOneAndUpdate(postId, { comments })
+        }
+        res.status(201).send({ commentId });
     } catch (err) {
         res.status(400).send(err);
     }
 });
 
+router.put('/:commentId', async (req, res) => {
+    console.log(" changing comment API")
+    const { commentText } = req.body
+    const { commentId } = req.params
 
-// UPDATE comments ---------------------------------------
-router.put('/:commentId', (req, res, next) => {
-    Comment.update({ commentId: req.params.commentid }, { comment: req.body.comment })
-        .then((result) => {
-            res.json(result)
-        })
-        .catch((err) => {
-            console.error(err)
-            next(err)
-        })
+    try {
+        await Comment.findOneAndUpdate({ commentId }, { commentText })
+        res.status(201).send("comment  successfully updated")
+    } catch (err) {
+        res.status(500).send();
+    }
 })
 
-// delete comments ---------------------------------------
+
 router.delete('/:commentId', async (req, res) => {
+    console.log(" deleting comment API")
+    const { commentId } = req.params
+    console.log(commentId)
     try {
-        const user = await User.findByIdAndDelete(req.params.commentId); // find one and delete
-        if (!user) res.status(404).send(); // if user is not received
-        res.send(user);
-    } catch (err) { // if error occurs
-        res.status(500).send(); // internal server error messege
+
+        await Comment.findOneAndRemove({ commentId })
+        res.status(201).send("comment successfully deleted")
+    } catch (err) {
+        res.status(500).send();
     }
 
 });
+
 module.exports = router

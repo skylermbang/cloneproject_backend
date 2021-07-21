@@ -1,35 +1,36 @@
 
 const mongoose = require("mongoose");
 const { Schema } = mongoose
+const getCurrentDate = require("../utils/moment")
 const PostSchema = new Schema({
 
+    _id: Schema.Types.ObjectId,
     postId: Number,
-    userInfo: [{
+    userInfo: {
 
         firstName: String,
         lastName: String,
         profilePic: String,
-    }],
-    content: [{
+    },
+    content: {
         text: String,
         picture: String,
-        createdAt: Date
-    }],
-
+        createdAt: { type: Date, default: Date.now }
+    },
     comments: [{
-        commentId: Number,
-        // q
-        userInfo: [{ firstName: String, lastName: String, profilePic: String }],
-        commentText: String,
-        createdAt: Date
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+
     }],
 
-    like: [{
-        likeCnt: Number,
-        userList: [{ firstName: String, lastName: String }]
-    }],
+    like: {
+
+        likeCnt: { type: Number, default: 0 },
+        userList: { type: Array }
+    },
 
 
 })
 
 module.exports = mongoose.model('Post', PostSchema);
+

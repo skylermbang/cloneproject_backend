@@ -19,37 +19,68 @@ router.post("/", authMiddleware, async (req, res) => {
     console.log("Writing post API")
     const posts = await Post.find({})
     const postId = posts.length + 1
-
     const user = res.locals.user
     const firstName = user.firstName
     const lastName = user.lastName
     const profilePic = user.profilePic
     const userInfo = { firstName, lastName, profilePic }
-
-    const { content } = req.body
-    //user Info search by userId from token -> 
-    const like = { likeCnt: 0, userList: [{}] }
+    const { content, like } = req.body
     const _id = new mongoose.Types.ObjectId()
     await Post.create({ postId, content, userInfo, like, _id })
     res.status(201).send({ postId: postId })
 })
 
-router.delete("/:postId", async (req, res) => {
+router.delete("/:postId", authMiddleware, async (req, res) => {
     console.log("delete post API")
+    const user = res.locals.user
     const { postId } = req.params
     console.log(postId)
     await Post.findOneAndRemove({ postId })
     res.status(201).send("Post successfully deleted")
 })
 
-router.put("/:postId", async (req, res) => {
+router.put("/:postId", authMiddleware, async (req, res) => {
     console.log("delete post API")
+    const user = res.locals.user
     const { postId } = req.params
     console.log(postId)
     const { content } = req.body
     console.log(content, "here line 5000000")
     await Post.findOneAndUpdate({ postId }, { content })
     res.status(201).send("Post successfully updated")
+})
+
+router.put("/:postId/like", authMiddleware, async (req, res) => {
+    console.log("like API")
+    const { postId } = req.params
+    const user = res.locals.user
+    const firstName = user.firstName
+    const lastName = user.lastName
+    const profilePic = user.profilePic
+    const userId = user.userId
+    const userInfo = { firstName, lastName, profilePic, userId }
+    const post = await Post.findOne({ postId })
+    let likeCnt = post.like.likeCnt
+    let userList = post.like.userList
+    const isExist = userList.find(a => a.userId === userId)
+    if (isExist) {
+        for (let i = 0; i < userList.length; i++) {
+            const targetId = (userList[i].userId)
+            if (targetId === userId) {
+                userList.splice(i, 1)
+                post.save()
+            }
+        }
+        likeCnt = likeCnt - 1
+        post.like.likeCnt = likeCnt
+        return res.status(200).send("successfully unlike")
+    } else {
+        userList.push(userInfo)
+        likeCnt = likeCnt + 1
+        post.like.likeCnt = likeCnt
+        post.save()
+    }
+    res.status(201).send("like successfully updated")
 })
 
 module.exports = router

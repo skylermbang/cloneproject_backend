@@ -3,6 +3,9 @@ const app = express()
 const port = 8080
 const mongoose = require("mongoose");
 const cors = require("cors")
+const socketio = require("socket.io")
+
+
 app.use(cors())
 // routers
 const postsRouter = require("./routers/posts")

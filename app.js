@@ -13,22 +13,6 @@ app.get('/potato', (req, res) => {
     res.sendFile(__dirname + '/index.html')
 })
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected')
-    });
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg)
-        io.emit('chat message', msg)
-    })
-    socket.broadcast.emit('hi')
-})
-
-io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets
-
-server.listen(3000, () => { console.log('listening on *:3000')})
-
 app.use(cors())
 // routers
 const postsRouter = require("./routers/posts")
@@ -49,3 +33,19 @@ app.use('/api/comments', commentsRouter)
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+
+server.listen(3000, () => { console.log('listening on *:3000')})
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected')
+    });
+    socket.on('chat message', (msg) => {
+        console.log('message: ' + msg)
+        io.emit('chat message', msg)
+    })
+    socket.broadcast.emit('hi')
+})
+
+io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets

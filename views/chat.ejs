@@ -16,15 +16,14 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Chat</h1>
+    <h1>Chat Lobby</h1>
 
     <ul class="list-group" style="height: 300px; overflow-y: scroll">
-      <li class="list-group-item">An item</li>
-      <li class="list-group-item">A second item</li>
-      <li class="list-group-item">A third item</li>
-      <li class="list-group-item">A fourth item</li>
-      <li class="list-group-item">And a fifth one</li>
+      <li class="list-group-item" onclick="chatroom1()">Chatroom1</li>
     </ul>
+
+    <button class="btn btn-secondary mx-auto d-block w-100 mt-1">방1</button>
+    <button class="btn btn-secondary mx-auto d-block w-100 mt-1">방2</button>
 
     <div class="input-group mb-3 container">
       <input type="text" class="form-control" id="main-input" />
@@ -64,18 +63,82 @@
     -->
 
     <script>
-      var socket = io();
+      // var socket = io();
+      // $("#button-addon2").click(function () {
+      //   console.log("shit");
+      //   //socket.emit("potato", $("#main-input").val()); // send to server?
+      // });
+      // //.on("tomato", function (data) {
+      // // $(".list-group").append(`<li class="list-group-item"> ${data}</li>`);
+      // // $(".list-group").scrollTop($(".list-group").prop("scrollHeight"));
+      // //});
 
-      $("#button-addon2").click(function () {
-        console.log("shit");
-        socket.emit("potato", $("#main-input").val()); // send to server?
-      });
+      // var socket = io("/lobby");
 
-      socket.on("tomato", function (data) {
-        $(".list-group").append(`<li class="list-group-item"> ${data}</li>`);
+      // $(".mt-1")
+      //   .eq(0)
+      //   .click(function () {
+      //     socket.emit("방들어가고픔", "room1");
+      //   });
+      // $(".mt-1")
+      //   .eq(1)
+      //   .click(function () {
+      //     socket.emit("방들어가고픔", { name: "room1", pw: 1234 });
+      //   });
+
+      var socket = io("/lobby");
+      socket.emit("user", socket.id);
+
+      $(".mt-1")
+        .eq(0)
+        .click(function () {
+          console.log(socket.id, "room1");
+          socket.emit("requestJoin", "room1");
+          socket.emit("who", socket.id);
+        });
+
+      socket.on("a", function (data) {
+        //console.log(socket.id);
+        $(".list-group").append(
+          '<li class="list-group-item" onclick="one()">' +
+            data +
+            " is online</li>"
+        );
         $(".list-group").scrollTop($(".list-group").prop("scrollHeight"));
       });
 
+      $(".mt-1")
+        .eq(1)
+        .click(function () {
+          console.log(socket.id, "room2");
+          socket.emit("requestJoin", "room2");
+        });
+      $("#button-addon2").click(function () {
+        //console.log(socket.id);
+        socket.emit("chat", $("#main-input").val());
+        socket.emit("chat", $("#main-input").val());
+      });
+      socket.on("e", function (data) {
+        //console.log(socket.id);
+        $(".list-group").append(
+          '<li class="list-group-item">' + data + "</li>"
+        );
+        $(".list-group").scrollTop($(".list-group").prop("scrollHeight"));
+      });
+
+      function one() {}
+
+      function chatroom1() {
+        var socket = io("/chatroom1");
+        $("#button-addon2").click(function () {
+          console.log("shit");
+          socket.emit("potato", $("#main-input").val()); // send to server?
+        });
+        socket.on("tomato", function (data) {
+          $(".list-group").append(`<li class="list-group-item"> ${data}</li>`);
+          $(".list-group").scrollTop($(".list-group").prop("scrollHeight"));
+        });
+      }
       // function chat() {
       //   console.log("fuck");
       //   socket.emit("potato", $("#main-input").val()); // send to server?

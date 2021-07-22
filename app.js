@@ -7,7 +7,15 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const socketio = require("socket.io")
 const { Server } = require("socket.io")
-const io = new Server(server)
+const Chat = require("./schemas/chats")
+//const io = new Server(server)
+
+
+const io = new Server(server, {
+    cors: { origin: "*" }
+});
+
+app.use(cors())
 
 app.get('/potato', (req, res) => {
     res.sendFile(__dirname + '/index.html')
@@ -18,18 +26,26 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected')
     });
-    socket.on('chat message', (msg) => {
+
+    socket.on('user', function (data) {
+        console.log(data)
+        io.emit('user', data)
+    });
+
+    socket.on('chat message', async (msg) => {
         console.log('message: ' + msg)
+        console.log(msg.chat, msg.name)
+
+        //await Chat.create({ name: msg.name, message: msg.chat })
+
         io.emit('chat message', msg)
     })
     socket.broadcast.emit('hi')
 })
-
 io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets
+server.listen(3000, () => { console.log('listening on *:3000') })
 
-server.listen(3000, () => { console.log('listening on *:3000')})
 
-app.use(cors())
 // routers
 const postsRouter = require("./routers/posts")
 const testsRouter = require("./routers/tests")
@@ -49,3 +65,4 @@ app.use('/api/comments', commentsRouter)
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+

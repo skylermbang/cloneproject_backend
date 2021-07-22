@@ -13,15 +13,49 @@ app.use(express.json());
 const connect = require("./schemas");
 connect();
 
-
+let user = []
 
 io.on('connection', function (socket) {
-    console.log('connected');
     socket.on('potato', function (data) {
         console.log(data)
         io.emit('tomato', data)
     })
 });
+
+// var chat1 = io.of('/chatroom1')
+// chat1.on('connection', function (socket) {
+
+//     socket.join('room')
+//     console.log('welcome to chatroom1');
+//     socket.on('potato', function (data) {
+//         console.log(data)
+//         chat1.emit('tomato', data)
+//     })
+// });
+
+var chat1 = io.of('/lobby');
+chat1.on('connection', function (socket) {
+
+    socket.on('user', function (data) {
+        console.log(data, "fuck here")
+    })
+
+    var roomNo = '';
+
+    socket.on('requestJoin', function (data) {
+        socket.join(data);
+        roomNo = data;
+    });
+
+    socket.on('who', function (data) {
+        chat1.to(roomNo).emit('a', data);
+    });
+    socket.on('chat', function (data) {
+        console.log(data);
+        chat1.to(roomNo).emit('e', data);
+    });
+});
+
 
 app.get('/chat', function (요청, 응답) {
     응답.render('chat.ejs')

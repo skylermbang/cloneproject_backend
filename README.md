@@ -23,7 +23,7 @@ Repository :
 <br>
  
 
-## Proejct Scopre
+## Proejct Scope
 
  1. Project Name 
       Fakebook ( facebook clone coding project)

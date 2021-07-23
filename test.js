@@ -22,16 +22,6 @@ io.on('connection', function (socket) {
     })
 });
 
-// var chat1 = io.of('/chatroom1')
-// chat1.on('connection', function (socket) {
-
-//     socket.join('room')
-//     console.log('welcome to chatroom1');
-//     socket.on('potato', function (data) {
-//         console.log(data)
-//         chat1.emit('tomato', data)
-//     })
-// });
 
 var chat1 = io.of('/lobby');
 chat1.on('connection', function (socket) {

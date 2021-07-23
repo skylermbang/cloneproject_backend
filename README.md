@@ -2,8 +2,8 @@
 
 # Hangehae 99. (99Days Web Dev Bootcamp) 
 
-  Week 7 :  [Movie Talk].  (2021.07.15- 2021.07.23)
-#### Team : 이동민 (Dongmin Lee),   방민수 (Skyler Bang ), 최지혁 (Jihyuk Choi) , 김수연 (Sooyeon Kim)
+  Week 7 :  FAKEBOOK  (2021.07.15- 2021.07.23)
+
 
 
 
@@ -79,7 +79,30 @@ Repository :
    Unfold
   </summary>
     <br>
+  
+  
+  Node Package 
+    | NPM Package  |   |   
+    |---|---|
+    | cors  | Security  |    
+    | dotenv | loads environment  |     
+    |  express | Web Framework  |    
+    | jsonwebtoken | JWT token  |    
+    | moment|  Data time foramt |     
+    |  mongoose | Mongo DB    |  
+    | multer  | multipart/form-data   |    
+    | nodemon |  monitor script |     
+    |  object-hash | Crpyto module  |    
+    | socket.io |  realtime Framework |    
 
+
+   
+  * ## API Documentatoin
+  https://documenter.getpostman.com/view/16410236/TzmChYYe
+
+
+ 
+<!-- 
     Result Pictures
     ![](pic/login.png) 
     Login Page 
@@ -95,23 +118,8 @@ Repository :
      <br>
     ![](pic/singup.png)  
         Singup page
-     <br>
- 
-    * ## Frontend
-    * <details>
-        <summary>디자인</summary>
-        <br>
-       
-        ![](img/design4.jpg)    
-        초안 2   
-        <br>
-        ![](img/design5.png)   
-        초안 1 발전   
-        
-        </details>
-        <br>
+     <br> -->
 
-  </details>
-  <br>
+ 
   
   

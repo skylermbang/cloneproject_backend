@@ -1,47 +1,68 @@
 const express = require('express')
 const app = express()
+const http = require('http')
+const server = http.createServer(app)
 const port = 8080
+const mongoose = require("mongoose")
+const cors = require("cors")
+const socketio = require("socket.io")
+const { Server } = require("socket.io")
+const Chat = require("./schemas/chats")
+//const io = new Server(server)
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
+
+const io = new Server(server, {
+    cors: { origin: "*" }
+});
+
+app.use(cors())
+
+app.get('/potato', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
 })
 
-const connect = require("./schemas");
-connect();
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected')
+    });
 
-//checking mongoose db connection
-// const mongoose = require("mongoose");
-// app.get("/mongodb", async (req, res) => {
-//     await mongoose.connect("mongodb://localhost/clone", {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//         useFindAndModify: true,
-//         useCreateIndex: true,
-//     });
+    socket.on('user', function (data) {
+        console.log(data)
+        io.emit('user', data)
+    });
 
+    socket.on('chat message', async (msg) => {
+        console.log('message: ' + msg)
+        console.log(msg.chat, msg.name)
 
-//     const { Schema } = mongoose;
-//     const blogsSchema = new Schema({
-//         postId: {
-//             type: Number,
-//             required: true,
-//             unique: true,
-//         },
-//     });
+        //await Chat.create({ name: msg.name, message: msg.chat })
 
-//     let blogs = mongoose.model("blogs", blogsSchema);
-//     await blogs.create({
-//         postId: 1,
-//     });
+        io.emit('chat message', msg)
+    })
+    socket.broadcast.emit('hi')
+})
+io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets
+server.listen(3000, () => { console.log('listening on *:3000') })
 
 
-// res.send("ok");
-// });
+// routers
+const postsRouter = require("./routers/posts")
+const testsRouter = require("./routers/tests")
+const indexRouter = require("./routers/index")
+const commentsRouter = require("./routers/comments")
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+const connect = require("./schemas")
+connect()
 
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
+app.use('/api/posts', postsRouter)
+app.use('/test', testsRouter)
+const carsRouter = require("./routers/car")
+app.use('/cars', carsRouter)
+app.use('/api/', indexRouter)
+app.use('/api/comments', commentsRouter)
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+

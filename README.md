@@ -38,8 +38,8 @@ Repository :
 
     Sign up
       Create an Account
-         -Check ID
-         -Check PW 
+ -      Check ID
+ -      Check PW 
       Log in
 
       Log out 
